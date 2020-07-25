@@ -1,0 +1,61 @@
+version: "3.5"
+
+services:
+  geth-bootnode:
+    hostname: geth-bootnode
+    container_name: geth-bootnode
+    env_file:
+      - ./bootnode/bootnode.env
+    build:
+      context: ./
+      dockerfile: ./bootnode/Dockerfile
+    networks:
+      geth-network:
+        ipv4_address: 172.25.0.101
+    ports:
+      - 30301:30301
+
+  geth-miner1:
+    hostname: geth-miner1
+    container_name: geth-miner1
+    depends_on:
+      - geth-bootnode
+    env_file:
+      - ./miner/miner1.env
+    ports:
+      - 8545:8545/tcp
+    networks:
+      geth-network:
+        ipv4_address: 172.25.0.102
+    build:
+      context: ./
+      dockerfile: ./miner/Dockerfile
+      args:
+        privatekey: df504d175ae63abf209bad9dda965310d99559620550e74521a6798a41215f46
+        password: pass
+
+  geth-miner2:
+    hostname: geth-miner2
+    container_name: geth-miner2
+    depends_on:
+      - geth-bootnode
+    env_file:
+      - ./miner/miner2.env
+    ports:
+      - 8546:8545/tcp
+    networks:
+      geth-network:
+        ipv4_address: 172.25.0.104
+    build:
+      context: ./
+      dockerfile: ./miner/Dockerfile
+      args:
+        privatekey: bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35
+        password: word
+
+networks:
+  geth-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
