@@ -13,7 +13,7 @@ services:
       geth-network:
         ipv4_address: 172.25.0.101
     ports:
-      - 30301:30301
+      - 30301:30301/udp
 
   geth-miner1:
     hostname: geth-miner1
@@ -22,8 +22,6 @@ services:
       - geth-bootnode
     env_file:
       - ./miner/miner1.env
-    ports:
-      - 8545:8545/tcp
     networks:
       geth-network:
         ipv4_address: 172.25.0.102
@@ -41,11 +39,9 @@ services:
       - geth-bootnode
     env_file:
       - ./miner/miner2.env
-    ports:
-      - 8546:8545/tcp
     networks:
       geth-network:
-        ipv4_address: 172.25.0.104
+        ipv4_address: 172.25.0.103
     build:
       context: ./
       dockerfile: ./miner/Dockerfile
