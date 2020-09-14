@@ -12,8 +12,6 @@ services:
     networks:
       geth-network:
         ipv4_address: 172.25.0.101
-    ports:
-      - 30301:30301/udp
 
   geth-miner1:
     hostname: geth-miner1
@@ -48,6 +46,36 @@ services:
       args:
         privatekey: bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35
         password: word
+
+  geth-node:
+    hostname: geth-node
+    container_name: geth-node
+    depends_on:
+      - geth-miner1
+      - geth-miner2
+    env_file:
+      - ./node/node.env
+    networks:
+      geth-network:
+        ipv4_address: 172.25.0.104
+    build:
+      context: ./
+      dockerfile: ./node/Dockerfile
+      args:
+        privatekey: bc5b578e0dcb2dbf98dd6e5fe62cb5a28b84a55e15fc112d4ca88e1f62bd7c35
+        password: word
+
+  explorer:
+    image: alethio/ethereum-lite-explorer
+    hostname: explorer
+    container_name: explorer
+    environment:
+      - APP_NODE_URL=http://172.25.0.104:8545
+    networks:
+      geth-network:
+        ipv4_address: 172.25.0.125
+    ports:
+      - "8080:8080"
 
 networks:
   geth-network:
