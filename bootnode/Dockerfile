@@ -12,4 +12,3 @@ WORKDIR "/root"
 CMD exec bootnode -nodekeyhex $nodekeyhex -addr $bootnodeIp:30301 -verbosity=$verbosity
 
 EXPOSE 30301/udp
-EXPOSE 30303/udp

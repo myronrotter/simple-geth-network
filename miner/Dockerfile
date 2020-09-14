@@ -21,5 +21,6 @@ RUN echo $privatekey > ~/.privatekey
 RUN geth account import --password ~/.accountpassword  ~/.privatekey
 
 CMD exec geth --bootnodes enode://$bootnodeId@$bootnodeIp:30301 --nodekeyhex $nodekeyhex --networkid $networkId --verbosity=$verbosity --syncmode=full --nousb --mine --miner.gasprice 0 --miner.etherbase $address --unlock $address --password ~/.accountpassword --allow-insecure-unlock
+#CMD exec geth --nodekeyhex $nodekeyhex --networkid $networkId --verbosity=$verbosity --syncmode=full --nousb --mine --miner.gasprice 0 --miner.etherbase $address --unlock $address --password ~/.accountpassword --allow-insecure-unlock
 
 EXPOSE 30303
